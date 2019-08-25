@@ -1,10 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-
-export interface Store {
-  path: Array<string | number>;
-  state: any
-}
+import { Store } from './Store';
 
 export class StateTrainCore {
   protected store$: Observable<Store>;

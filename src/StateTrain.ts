@@ -3,7 +3,7 @@ import { flatMap, map, take } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { StateTrainSegment } from './StateTrainSegment';
-import { Store } from './StateTrainCore';
+import { Store } from './Store';
 
 export class StateTrain extends StateTrainSegment {
   protected store$: BehaviorSubject<Store>;
@@ -25,7 +25,7 @@ export class StateTrain extends StateTrainSegment {
     const setNewStore = (newStore: Store): Observable<Store> => this.store$
       .pipe(
         take(1),
-        map(store => {
+        map((store: Store): Store => {
           const path = store.path;
           const state = _.set(store.state, newStore.path, newStore.state);
           return { path, state }

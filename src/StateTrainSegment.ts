@@ -2,7 +2,8 @@ import { Observable, pipe, Subject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import * as _ from 'lodash';
 
-import { StateTrainCore, Store } from './StateTrainCore';
+import { StateTrainCore } from './StateTrainCore';
+import { Store } from './Store';
 
 export class StateTrainSegment extends StateTrainCore {
   constructor(
