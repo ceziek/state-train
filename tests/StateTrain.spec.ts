@@ -1,6 +1,6 @@
-import { StateTrain } from '../src/';
+import { StateTrain } from '../src/StateTrain';
 
-describe('calculate', () => {
+describe('StateTrain', () => {
   let component: StateTrain;
   const state = { prop1: { subProp1: [{ a: '1', b: 2 }] } };
 
@@ -8,7 +8,7 @@ describe('calculate', () => {
     component = new StateTrain(state);
   });
 
-  it('add', () => {
+  it('should init State Train', () => {
     expect(component).toBeTruthy();
   })
 });

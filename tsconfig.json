@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2015",
+    "module": "ESNEXT",
+    "target": "ES2017",
     "moduleResolution": "node",
-    "outDir": "dist",
+    "outDir": "dist/src/",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "esModuleInterop": true
   },
-  "lib": ["es2015"],
+  "lib": ["es2017"],
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules",
     "tests",
