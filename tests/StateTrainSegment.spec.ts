@@ -4,13 +4,10 @@ import { Store } from '../src/Store';
 
 describe('StateTrainSegment', () => {
   let component: StateTrainSegment;
-  const expectedState = { prop: 'value' };
 
   beforeEach(() => {
-    const store$ = of<Store>({
-      path: ['propName', 'anotherPropName'],
-      state: expectedState
-    });
+    const store: Store = { path: [], state: {} };
+    const store$ = of<Store>(store);
     const set$ = new Subject<Store>();
 
     component = new StateTrainSegment(store$, set$);
@@ -21,8 +18,18 @@ describe('StateTrainSegment', () => {
   });
 
   it('should get state part by property name', async () => {
-    const value = await component.get('prop').toPromise();
-    expect(value).toEqual(expectedState.prop)
+    const state = { prop1: 'first', prop2: 'second', prop3: 'third' };
+    const store = {
+      path: [],
+      state: state
+    };
+
+    (<any>component).store$ = of(store);
+    let value = await component.get('prop1').toPromise();
+    expect(value).toEqual('first');
+
+    value = await component.get('prop3').toPromise();
+    expect(value).toEqual('third')
   });
 
   it('should get state part by array index', async () => {
@@ -74,5 +81,65 @@ describe('StateTrainSegment', () => {
 
     element = await component.find({ c: 2 }).toPromise();
     expect(element).toEqual(state.prop2);
+  });
+
+  it('should emit new state on set', async () => {
+    const state = [ 'a', 'b', 'c'];
+    const store = {
+      path: [],
+      state: state
+    };
+    (<any>component).store$ = of(store);
+
+    const set$Spy = spyOn((<any>component).set$, 'next');
+
+    const newState = { a:1, b:2 };
+    const newStore = {
+      path: store.path,
+      state: newState
+    };
+
+    await component.set(newStore.state);
+    expect(set$Spy).toHaveBeenCalledWith(newStore);
+  });
+
+  it('should emit patched state object in store on patch', async () => {
+    const state = { a:1, b:2 };
+    const store = {
+      path: [],
+      state: state
+    };
+    (<any>component).store$ = of(store);
+
+    const set$Spy = spyOn((<any>component).set$, 'next');
+
+    const newState = { a:1, b:8, c: 3};
+    const newStore = {
+      path: store.path,
+      state: newState
+    };
+
+    await component.patch({ b:8, c: 3 });
+    expect(set$Spy).toHaveBeenCalledWith(newStore);
+  });
+
+  it('should emit patched state array in store on patch', async () => {
+    const state = [ 'a', 'b', 'c'];
+    const store = {
+      path: [],
+      state: state
+    };
+    (<any>component).store$ = of(store);
+
+    const set$Spy = spyOn((<any>component).set$, 'next');
+
+    const newState = [ 'a', 'b', 'c', 'd'];
+    const newStore = {
+      path: store.path,
+      state: newState
+    };
+
+    await component.patch('d');
+    expect(set$Spy).toHaveBeenCalledWith(newStore);
   })
 });
